@@ -20,12 +20,24 @@ metadata {
         capability "sensor"
         capability "capability.temperatureMeasurement"
         capability "capability.relativeHumidityMeasurement"
+        capability "Illuminance Measurement"
+        capability "Ultraviolet Index"
+        capability "Wind Speed"
+        capability "stsmartweather.windSpeed"
+        capability "stsmartweather.windDirection"
+        capability "stsmartweather.apparentTemperature"
+        capability "stsmartweather.astronomicalData"
+        capability "stsmartweather.precipitation"
+        capability "stsmartweather.ultravioletDescription"
+        capability "stsmartweather.weatherAlert"
+        capability "stsmartweather.weatherForecast"
+        capability "stsmartweather.weatherSummary"
 	}
 
 	tiles(scale: 2) {
 
 	standardTile("TWC_web", "device.TWC_web",  width: 6, height: 3,  canChangeIcon: false ) {
-            state "default", icon: "https://business.weather.com/img/the-weather-company-logo.png", backgroundColor: "#999999"      }   
+            state "default", icon: "st.Weather.weather11", backgroundColor: "#999999"      }   
              
     standardTile("temperature", "device.temperature", width: 2, height: 2, canChangeIcon: false) {
             state "default", label: '${currentValue}º',unit:'${currentValue}', icon: "st.Weather.weather2", backgroundColor:"#999999"}  
