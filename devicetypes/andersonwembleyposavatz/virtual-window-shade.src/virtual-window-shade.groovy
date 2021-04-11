@@ -16,11 +16,12 @@ metadata {
 	definition (name: "VIRTUAL Window Shade", namespace: "andersonwembleyposavatz", author: "Anderson W Posavatz", runLocally: true, ocfDeviceType: "oic.d.blind", minHubCoreVersion: '000.021.00001', executeCommandsLocally: true) {
 		capability "Actuator"
 		capability "Sensor"
+		capability "Refresh"
+		capability "Switch"
 		capability "Window Shade"
         capability "Health Check"
         
-        command "open"
-        command "closed"        
+       
     }
 
 	preferences {}
@@ -42,24 +43,20 @@ metadata {
 			state "default", label: "Closed", action:"closed", icon:"st.shades.shade-closed",  backgroundColor: "#ffffff"
 		}
 
-		main(["windowShade"])
-		details(["windowShade", "open", "closed"])
+		main "windowShade"
+		details "windowShade", "open", "closed"
 	}
 }
 
 def installed() {
-	log.trace "Executing 'installed'"
 	initialize()
 }
 
 def updated() {
-	log.trace "Executing 'updated'"
 	initialize()
 }
 
-private initialize() {
-	log.trace "Executing 'initialize'"
-
+def initialize() {
 	sendEvent(name: "DeviceWatch-DeviceStatus", value: "online")
 	sendEvent(name: "healthStatus", value: "online")
 	sendEvent(name: "DeviceWatch-Enroll", value: [protocol: "cloud", scheme:"untracked"].encodeAsJson(), displayed: false)

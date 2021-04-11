@@ -1,7 +1,7 @@
 /**
- *  The Weather Company Web
+ *  MY FORECAST WEB
  *
- *  Copyright 2019 Philippe Portes
+ *  Copyright 2021 Anderson Wembley Posavatz
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -11,12 +11,12 @@
  *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
- *
  */
 metadata {
-	definition (name: "The Weather Company Web", namespace: "philippeportesppo", author: "Philippe Portes", vid: "generic-temperature-measurement", ocfDeviceType: "oic.d.thermostat") {
+	definition (name: "My Forecast Web", namespace: "andersonwembleyposavatz", author: "Anderson W. Posavatz",  cstHandler: true) {
 		capability "refresh"
         capability "polling"
+        capability "sensor"
         capability "sensor"
         capability "capability.temperatureMeasurement"
         capability "capability.relativeHumidityMeasurement"
@@ -32,12 +32,13 @@ metadata {
         capability "stsmartweather.weatherAlert"
         capability "stsmartweather.weatherForecast"
         capability "stsmartweather.weatherSummary"
+        capability "Refresh"
 	}
 
 	tiles(scale: 2) {
 
-	standardTile("TWC_web", "device.temperature",  width: 6, height: 3,  canChangeIcon: false ) {
-            state "default", icon: "st.Weather.weather2", backgroundColor: "#999999"      }   
+	standardTile("TWC_web", "device.TWC_web",  width: 6, height: 3,  canChangeIcon: false ) {
+            state "default", icon: "st.Weather.weather11", backgroundColor: "#999999"      }   
              
     standardTile("temperature", "device.temperature", width: 2, height: 2, canChangeIcon: false) {
             state "default", label: '${currentValue}º',unit:'${currentValue}', icon: "st.Weather.weather2", backgroundColor:"#999999"}  
@@ -46,14 +47,14 @@ metadata {
             state "default", label: '${currentValue}%', icon: "st.Weather.weather12", backgroundColor:"#999999"      }
             
 	standardTile("TWCFeelsLikelevel", "device.TWCFeelsLikelevel",  width: 2, height: 2, canChangeIcon: false) {
-            state "default",  label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/realfeel.png", backgroundColor:"#999999"}
+            state "default",  label: '${currentValue}º',unit:'${currentValue}',icon: "st.quirky.spotter.quirky-spotter-temp", backgroundColor:"#999999"}
 
 	standardTile("TWCdewpointlevel", "device.TWCdewpointlevel",  width: 2, height: 2, canChangeIcon: false) {
-            state "default", label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/dewpoint.png", backgroundColor:"#999999"}
+            state "default", label: '${currentValue}º',unit:'${currentValue}',icon: "st.thermostat.ac.air-conditioning", backgroundColor:"#999999"}
             
     standardTile("TWC_Icon_UrlIcon", "device.TWC_Icon_UrlIcon", decoration: "flat",   width: 2, height: 2) {
                 
-                state "na",icon:"st.Weather.weather2"
+                state "na",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/na.png"
                 state "0", icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/0.png"
                 state "1", icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/1.png"
                 state "2", icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/2.png"
@@ -102,7 +103,8 @@ metadata {
                 state "45",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/45.png"
                 state "46",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/46.png"
                 state "47",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/47.png"
-                
+                		// TODO: define your main and details tiles here
+
 	}
             
     standardTile("refresh", "device.refresh", decoration: "flat", width: 2, height: 2) {
@@ -115,7 +117,7 @@ metadata {
 
     standardTile("TWC_main", "device.TWC_main", decoration: "flat", width: 6, height: 4) 
     	{
-               state "na",icon:"st.Weather.weather2"
+               state "na",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/na.png"
                 state "0", icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/0.png"
                 state "1", icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/1.png"
                 state "2", icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/2.png"
@@ -210,6 +212,10 @@ def parse(String description) {
     state.highhumidityalert=false    
     refresh()    
     runEvery10Minutes(forcepoll)
+	// TODO: handle 'temperature' attribute
+	// TODO: handle 'dewpoint' attribute
+	// TODO: handle 'humidity' attribute
+	// TODO: handle 'windspeed' attribute
     
 }
 
@@ -219,6 +225,11 @@ def forcepoll()
 }
 
 // handle commands
+def deviceNotification() {
+	log.debug "Executing 'deviceNotification'"
+	// TODO: handle 'deviceNotification' command
+}
+
 def refresh() {
 	log.debug "Executing 'refresh'"
     

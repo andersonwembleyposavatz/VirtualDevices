@@ -1,5 +1,5 @@
 /**
- *  VIRTUAL Switch and Motion Sensor
+ *  VIRTUAL Switch and Contact Sensor
  *
  *  Copyright 2021 Anderson W Posavatz
  *
@@ -14,13 +14,13 @@
  *
  */
 metadata {
-	definition (name: "VIRTUAL Switch and Motion Sensor", namespace: "andersonwembleyposavatz", author: "Anderson W Posavatz", vid: "generic-motion", runLocally: true , executeCommandsLocally: true , ocfDeviceType: "x.com.st.d.sensor.motion", 
+	definition (name: "VIRTUAL Switch and Contact Sensor", namespace: "andersonwembleyposavatz", author: "Anderson W Posavatz", vid: "generic-contact", runLocally: true , executeCommandsLocally: true , ocfDeviceType: "x.com.st.d.sensor.contact", 
  ) {
 		capability "Actuator"
 		capability "Switch"
 		capability "Refresh"
 		capability "Sensor"
-		capability "Motion Sensor"
+		capability "Contact Sensor"
 		capability "Health Check"
 	}
 
@@ -30,21 +30,21 @@ metadata {
 
 	tiles {
 		standardTile("toggle", "device.switch", width: 3, height: 3) {
-			state("off", label:'${name}', action:"on", icon:"st.motion.motion.inactive", backgroundColor:"#00A0DC", nextState:"turningOn")
-			state("on", label:'${name}', action:"off", icon:"st.motion.motion.active", backgroundColor:"#cccccc", nextState:"turningOff")
-			state("turningOn", label:'${name}', icon:"st.motion.motion.inactive", backgroundColor:"#cccccc")
-			state("turningOff", label:'${name}', icon:"st.motion.motion.active", backgroundColor:"#00A0DC")
+			state("off", label:'${name}', action:"on", icon:"st.contact.contact.closed", backgroundColor:"#00A0DC", nextState:"turningOn")
+			state("on", label:'${name}', action:"off", icon:"st.contact.contact.open", backgroundColor:"#cccccc", nextState:"turningOff")
+			state("turningOn", label:'${name}', icon:"st.contact.contact.closed", backgroundColor:"#cccccc")
+			state("turningOff", label:'${name}', icon:"st.contact.contact.open", backgroundColor:"#00A0DC")
 			
 		}
-		standardTile("on", "device.switch", inactiveLabel: false, decoration: "flat") {
-			state "default", label:'Motion', icon:"st.motion.motion.active", backgroundColor:"#00A0DC", action:"inactive"
+		standardTile("on", "device.contact", inactiveLabel: false, decoration: "flat") {
+			state "default", label:'opened', icon:"st.contact.contact.open", backgroundColor:"#00A0DC"
 		}
-		standardTile("off", "device.switch", inactiveLabel: false, decoration: "flat") {
-			state "default", label:'No Motion', icon:"st.motion.motion.inactive", backgroundColor:"#cccccc", action:"active"
+		standardTile("off", "device.contact", inactiveLabel: false, decoration: "flat") {
+			state "default", label:'closed', icon:"st.contact.contact.closed", backgroundColor:"#cccccc"
 		}
 
-		main (["toggle"])
-		details(["toggle", "motion", "switch", "refresh", "on", "off", "active", "inactive"])
+		main (["contact", "toggle"])
+		details(["toggle", "contact", "switch", "refresh", "on", "off", "opened", "closed"])
 	}
 }
 
@@ -54,32 +54,32 @@ def parse(String description) {
 
 def on() {
 	sendEvent(name: "switch", value: "turningOn")
-    runIn(0, finishOpening)
+    runIn(2, finishOpening)
 }
 
 def off() {
     sendEvent(name: "switch", value: "turningOff")
-	runIn(0, finishClosing)
+	runIn(2, finishClosing)
 }
 
-def active() {
+def open() {
 	sendEvent(name: "switch", value: "turningOn")
-    runIn(0, finishOpening)
+    runIn(2, finishOpening)
 }
 
-def inactive() {
+def close() {
     sendEvent(name: "switch", value: "turningOff")
-	runIn(0, finishClosing)
+	runIn(2, finishClosing)
 }
 
 def finishOpening() {
     sendEvent(name: "switch", value: "on")
-    sendEvent(name: "motion", value: "active", isStateChange: true)
+    sendEvent(name: "contact", value: "opened")
 }
 
 def finishClosing() {
     sendEvent(name: "switch", value: "off")
-    sendEvent(name: "motion", value: "inactive", isStateChange: true)
+    sendEvent(name: "contact", value: "closed")
 }
 
 def installed() {
@@ -93,10 +93,8 @@ def updated() {
 }
 
 def initialize() {
-	log.trace "Executing 'initialize'"
-
 	sendEvent(name: "switch", value: "off")
-    sendEvent(name: "motion", value: "inactive")
+    sendEvent(name: "contact", value: "closed")
     
     sendEvent(name: "DeviceWatch-DeviceStatus", value: "online")
 	sendEvent(name: "healthStatus", value: "online")
